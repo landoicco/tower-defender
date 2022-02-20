@@ -1,34 +1,51 @@
 package main;
 
-import javax.imageio.ImageIO;
+import inputs.KeyboardListener;
+import inputs.MyMouseListener;
+import scenes.*;
+
 import javax.swing.JFrame;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class Game extends JFrame implements Runnable {
 
     private GameScreen gameScreen;
-    private BufferedImage img;
     private Thread gameThread;
+    private Render render;
+
+    private KeyboardListener keyboardListener;
+    private MyMouseListener myMouseListener;
 
     private final double FPS_SET = 120.0;
     private final double UPS_SET = 60.0;
-    
+
+    // Scene classes
+    private Menu menu;
+    private Settings settings;
+    private Playing playing;
+
     public Game() {
-        importImage();
-        setSize(640, 640);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setVisible(true);
+        initClasses();
 
-        gameScreen = new GameScreen(img);
         add(gameScreen);
+        pack();
+        setVisible(true);
+    }
+
+    private void initClasses() {
+        this.render = new Render(this);
+        this.gameScreen = new GameScreen(this);
+        this.menu = new Menu(this);
+        this.playing = new Playing(this);
+        this.settings = new Settings(this);
     }
 
     public static void main(String[] args) {
-        System.out.println("Hola Mundo!");
-        new Game().start();
+        System.out.println("Code compiled... Starting up!");
+        Game game = new Game();
+        game.initInputs();
+        game.start();
     }
 
     private void start() {
@@ -40,15 +57,15 @@ public class Game extends JFrame implements Runnable {
         //System.out.println("Game Updated!");
     }
 
-    private void importImage() {
-        InputStream is = getClass().getResourceAsStream("/spriteatlas.png");
+    private void initInputs() {
+        myMouseListener = new MyMouseListener();
+        keyboardListener = new KeyboardListener();
 
-        try {
-            img = ImageIO.read(is);
-        } catch (IOException e) {
-            System.err.println("Image not found/available!");
-            e.printStackTrace();
-        }
+        addMouseListener(myMouseListener);
+        addMouseMotionListener(myMouseListener);
+        addKeyListener(keyboardListener);
+
+        requestFocus();
     }
 
     @Override
@@ -59,21 +76,25 @@ public class Game extends JFrame implements Runnable {
         long lastFrame = System.nanoTime();
         long lastUpdate = System.nanoTime();
         long lastTimeCheck = System.currentTimeMillis();
+        long now;
         int frames = 0;
         int updates = 0;
 
         while (true) {
+
+            now = System.nanoTime();
+
             // Render
-            if (System.nanoTime() - lastFrame >= timePerFrame) {
+            if (now - lastFrame >= timePerFrame) {
                 repaint();
-                lastFrame = System.nanoTime();
+                lastFrame = now;
                 frames++;
             }
 
             // Update
-            if (System.nanoTime() - lastUpdate >= timePerUpdate) {
+            if (now - lastUpdate >= timePerUpdate) {
                 updateGame();
-                lastUpdate = System.nanoTime();
+                lastUpdate = now;
                 updates++;
             }
 
@@ -85,5 +106,24 @@ public class Game extends JFrame implements Runnable {
                 lastTimeCheck = System.currentTimeMillis();
             }
         }
+    }
+
+    // Getters
+
+    public Render getRender() {
+        return this.render;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+
+    public Playing getPlaying() {
+        return playing;
     }
 }

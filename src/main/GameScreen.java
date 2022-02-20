@@ -1,33 +1,28 @@
 package main;
 
 import javax.swing.JPanel;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
+import java.awt.*;
 
 public class GameScreen extends JPanel {
 
-    private BufferedImage img;
-    private ArrayList<BufferedImage> sprites = new ArrayList<>();
+    private Dimension size;
+    private Game game;
 
-    public GameScreen(BufferedImage img) {
-        this.img = img;
-        loadSprites();
+    public GameScreen(Game game) {
+        this.game = game;
+        setPanelSize();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        g.drawImage(sprites.get(29), 0, 0, null);
-
+        game.getRender().render(g);
     }
 
-    private void loadSprites() {
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
-                sprites.add(img.getSubimage(x * 32, y * 32, 32, 32));
-            }
-        }
+    private void setPanelSize() {
+        this.size = new Dimension(640, 640);
+        setMinimumSize(size);
+        setPreferredSize(size);
+        setMaximumSize(size);
     }
 }
