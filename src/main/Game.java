@@ -1,7 +1,5 @@
 package main;
 
-import inputs.KeyboardListener;
-import inputs.MyMouseListener;
 import scenes.*;
 
 import javax.swing.JFrame;
@@ -11,9 +9,6 @@ public class Game extends JFrame implements Runnable {
     private GameScreen gameScreen;
     private Thread gameThread;
     private Render render;
-
-    private KeyboardListener keyboardListener;
-    private MyMouseListener myMouseListener;
 
     private final double FPS_SET = 120.0;
     private final double UPS_SET = 60.0;
@@ -44,7 +39,7 @@ public class Game extends JFrame implements Runnable {
     public static void main(String[] args) {
         System.out.println("Code compiled... Starting up!");
         Game game = new Game();
-        game.initInputs();
+        game.gameScreen.initInputs();
         game.start();
     }
 
@@ -55,17 +50,6 @@ public class Game extends JFrame implements Runnable {
 
     private void updateGame() {
         //System.out.println("Game Updated!");
-    }
-
-    private void initInputs() {
-        myMouseListener = new MyMouseListener();
-        keyboardListener = new KeyboardListener();
-
-        addMouseListener(myMouseListener);
-        addMouseMotionListener(myMouseListener);
-        addKeyListener(keyboardListener);
-
-        requestFocus();
     }
 
     @Override

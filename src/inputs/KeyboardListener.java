@@ -15,12 +15,12 @@ public class KeyboardListener implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_A) {
             System.out.println("A key pressed!");
-            gameStates = PLAYING;
+            gameState = PLAYING;
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
             System.out.println("S key pressed!");
-            gameStates = SETTINGS;
+            gameState = SETTINGS;
         } else {
-            gameStates = MENU;
+            gameState = MENU;
         }
     }
 

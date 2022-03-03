@@ -1,11 +1,6 @@
 package main;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.awt.Graphics;
 
 public class Render {
 
@@ -16,7 +11,7 @@ public class Render {
     }
 
     public void render(Graphics g) {
-        switch (GameStates.gameStates) {
+        switch (GameStates.gameState) {
             case MENU:
                 game.getMenu().render(g);
                 break;

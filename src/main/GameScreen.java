@@ -1,5 +1,8 @@
 package main;
 
+import inputs.KeyboardListener;
+import inputs.MyMouseListener;
+
 import javax.swing.JPanel;
 import java.awt.*;
 
@@ -7,10 +10,23 @@ public class GameScreen extends JPanel {
 
     private Dimension size;
     private Game game;
+    private KeyboardListener keyboardListener;
+    private MyMouseListener myMouseListener;
 
     public GameScreen(Game game) {
         this.game = game;
         setPanelSize();
+    }
+
+    public void initInputs() {
+        myMouseListener = new MyMouseListener(game);
+        keyboardListener = new KeyboardListener();
+
+        addMouseListener(myMouseListener);
+        addMouseMotionListener(myMouseListener);
+        addKeyListener(keyboardListener);
+
+        requestFocus();
     }
 
     @Override

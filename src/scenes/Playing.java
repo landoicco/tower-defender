@@ -4,7 +4,7 @@ import helpers.LevelBuild;
 import main.Game;
 import managers.TileManager;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 public class Playing extends GameScene implements GameMethods {
 
@@ -25,5 +25,25 @@ public class Playing extends GameScene implements GameMethods {
                 g.drawImage(tileManager.getSprite(id), x * 32, y * 32, null);
             }
         }
+    }
+
+    @Override
+    public void mouseClicked(int x, int y) {
+
+    }
+
+    @Override
+    public void mouseMoved(int x, int y) {
+
+    }
+
+    @Override
+    public void mousePressed(int x, int y) {
+
+    }
+
+    @Override
+    public void mouseReleased(int x, int y) {
+
     }
 }
