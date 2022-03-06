@@ -4,7 +4,8 @@ import inputs.KeyboardListener;
 import inputs.MyMouseListener;
 
 import javax.swing.JPanel;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Dimension;
 
 public class GameScreen extends JPanel {
 
@@ -36,7 +37,7 @@ public class GameScreen extends JPanel {
     }
 
     private void setPanelSize() {
-        this.size = new Dimension(640, 640);
+        this.size = new Dimension(640, 690);
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);
