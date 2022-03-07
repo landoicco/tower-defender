@@ -1,6 +1,7 @@
 package scenes;
 
 import helpers.LevelBuild;
+import helpers.LoadSave;
 import main.Game;
 import managers.TileManager;
 import objects.Tile;
@@ -22,6 +23,8 @@ public class Playing extends GameScene implements GameMethods {
         lvl = LevelBuild.getLevelData();
         tileManager = new TileManager();
         bottomBar = new BottomBar(0, 640, 640, 50, this);
+
+        createDefaultLevel();
     }
 
     @Override
@@ -108,5 +111,13 @@ public class Playing extends GameScene implements GameMethods {
             lastTileY = tileY;
             lvl[tileX][tileY] = selectedTile.getId();
         }
+    }
+
+    private void createDefaultLevel() {
+        int[] array = new int[400];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = 0;
+        }
+        LoadSave.createLevel("Default Level", array);
     }
 }
