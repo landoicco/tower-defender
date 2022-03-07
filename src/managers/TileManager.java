@@ -24,6 +24,10 @@ public class TileManager {
         return tiles;
     }
 
+    public Tile getTile(int id) {
+        return tiles.get(id);
+    }
+
     private void loadAtlas() {
         atlas = LoadSave.getSpriteAtlas();
     }

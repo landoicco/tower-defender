@@ -3,14 +3,18 @@ package scenes;
 import helpers.LevelBuild;
 import main.Game;
 import managers.TileManager;
+import objects.Tile;
 import ui.BottomBar;
 
 import java.awt.Graphics;
 
 public class Playing extends GameScene implements GameMethods {
 
+    private int mouseX, mouseY, lastTileX, lastTileY, lastTileId;
     private int[][] lvl;
+    private boolean drawSelected;
     private TileManager tileManager;
+    private Tile selectedTile;
     private BottomBar bottomBar;
 
     public Playing(Game game) {
@@ -29,12 +33,15 @@ public class Playing extends GameScene implements GameMethods {
             }
         }
         bottomBar.draw(g);
+        drawSelectedTile(g);
     }
 
     @Override
     public void mouseClicked(int x, int y) {
         if (y > 640) {
             bottomBar.mouseClicked(x, y);
+        } else {
+            changeTile(x, y);
         }
     }
 
@@ -42,8 +49,12 @@ public class Playing extends GameScene implements GameMethods {
     public void mouseMoved(int x, int y) {
         if (y > 640) {
             bottomBar.mouseMoved(x, y);
+            drawSelected = false;
         } else {
             bottomBar.mouseReleased(x, y);
+            drawSelected = true;
+            mouseX = (x / 32) * 32;
+            mouseY = (y / 32) * 32;
         }
     }
 
@@ -59,7 +70,43 @@ public class Playing extends GameScene implements GameMethods {
         bottomBar.mouseReleased(x, y);
     }
 
+    @Override
+    public void mouseDragged(int x, int y) {
+        if (y < 640) {
+            changeTile(x, y);
+        }
+    }
+
+    public void setSelectedTile(Tile selectedTile) {
+        this.selectedTile = selectedTile;
+        drawSelected = true;
+    }
+
     public TileManager getTileManager() {
         return tileManager;
+    }
+
+    private void drawSelectedTile(Graphics g) {
+        if (selectedTile != null && drawSelected) {
+            g.drawImage(selectedTile.getSprite(), mouseX, mouseY,
+                    32, 32, null);
+        }
+    }
+
+    private void changeTile(int x, int y) {
+        if (selectedTile != null) {
+            int tileX = x / 32;
+            int tileY = y / 32;
+
+            if (lastTileX == tileX && lastTileY == tileY &&
+                    lastTileId == selectedTile.getId()) {
+                return;
+            }
+
+            lastTileId = selectedTile.getId();
+            lastTileX = tileX;
+            lastTileY = tileY;
+            lvl[tileX][tileY] = selectedTile.getId();
+        }
     }
 }

@@ -36,4 +36,9 @@ public class Settings extends GameScene implements GameMethods {
     public void mouseReleased(int x, int y) {
 
     }
+
+    @Override
+    public void mouseDragged(int x, int y) {
+
+    }
 }

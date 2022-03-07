@@ -1,6 +1,7 @@
 package scenes;
 
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 
 public interface GameMethods {
 
@@ -13,4 +14,6 @@ public interface GameMethods {
     void mousePressed(int x, int y);
 
     void mouseReleased(int x, int y);
+
+    void mouseDragged(int x, int y);
 }

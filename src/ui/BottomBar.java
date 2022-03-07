@@ -15,6 +15,7 @@ public class BottomBar {
     private int width, height, x, y;
     private MyButton bMenu;
     private Playing playing;
+    private Tile selectedTile;
 
     private ArrayList<MyButton> tileButtons = new ArrayList<>();
 
@@ -39,19 +40,46 @@ public class BottomBar {
     public void mouseClicked(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             setGameState(MENU);
+        } else {
+            for (MyButton button : tileButtons) {
+                if (button.getBounds().contains(x, y)) {
+                    selectedTile = playing.getTileManager().getTile(button.getId());
+                    playing.setSelectedTile(selectedTile);
+                    return;
+                }
+            }
         }
     }
 
     public void mouseMoved(int x, int y) {
-        resetButtons();
+        // Reset mouse over
+        bMenu.setMouseOver(false);
+        for (MyButton button : tileButtons) {
+            button.setMouseOver(false);
+        }
+
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
+        } else {
+            for (MyButton button : tileButtons) {
+                if (button.getBounds().contains(x, y)) {
+                    button.setMouseOver(true);
+                    return;
+                }
+            }
         }
     }
 
     public void mousePressed(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMousePressed(true);
+        } else {
+            for (MyButton button : tileButtons) {
+                if (button.getBounds().contains(x, y)) {
+                    button.setMousePressed(true);
+                    return;
+                }
+            }
         }
     }
 
@@ -79,14 +107,36 @@ public class BottomBar {
     private void drawButtons(Graphics g) {
         bMenu.draw(g);
         drawTileButtons(g);
+        drawSelectedTile(g);
+    }
+
+    private void drawSelectedTile(Graphics g) {
+        if (selectedTile != null) {
+            g.drawImage(selectedTile.getSprite(), 590, this.y, 50, 50, null);
+            g.setColor(Color.BLACK);
+            g.drawRect(590, this.y, 50, 50);
+        }
     }
 
     private void drawTileButtons(Graphics g) {
         for (MyButton button : tileButtons) {
-            button.draw(g);
+            // Draw sprite
             g.drawImage(getButtonImage(button.getId()),
                     button.getXPos(), button.getYPos(),
                     button.getWidth(), button.getHeight(), null);
+
+            // Mouse over
+            if (button.isMouseOver()) {
+                g.setColor(Color.BLACK);
+            } else {
+                g.setColor(Color.WHITE);
+            }
+            // Mouse pressed
+            if (button.isMousePressed()) {
+                g.setColor(Color.CYAN);
+            }
+            g.drawRect(button.getXPos(), button.getYPos(),
+                    button.getWidth(), button.getHeight());
         }
     }
 
@@ -96,5 +146,8 @@ public class BottomBar {
 
     private void resetButtons() {
         bMenu.resetBooleans();
+        for (MyButton button : tileButtons) {
+            button.resetBooleans();
+        }
     }
 }
