@@ -25,6 +25,7 @@ public class Playing extends GameScene implements GameMethods {
         bottomBar = new BottomBar(0, 640, 640, 50, this);
 
         createDefaultLevel();
+        loadDefaultLevel();
     }
 
     @Override
@@ -89,6 +90,11 @@ public class Playing extends GameScene implements GameMethods {
         return tileManager;
     }
 
+    public void saveLevel() {
+        // Hacer que cambie de nombre
+        LoadSave.saveLevel("default_level", lvl);
+    }
+
     private void drawSelectedTile(Graphics g) {
         if (selectedTile != null && drawSelected) {
             g.drawImage(selectedTile.getSprite(), mouseX, mouseY,
@@ -118,6 +124,10 @@ public class Playing extends GameScene implements GameMethods {
         for (int i = 0; i < array.length; i++) {
             array[i] = 0;
         }
-        LoadSave.createLevel("Default Level", array);
+        LoadSave.createLevel("default_level", array);
+    }
+
+    private void loadDefaultLevel() {
+        lvl = LoadSave.getLevelData("default_level");
     }
 }

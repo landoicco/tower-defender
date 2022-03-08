@@ -13,7 +13,7 @@ import static main.GameStates.setGameState;
 
 public class BottomBar {
     private int width, height, x, y;
-    private MyButton bMenu;
+    private MyButton bMenu, bSave;
     private Playing playing;
     private Tile selectedTile;
 
@@ -40,6 +40,8 @@ public class BottomBar {
     public void mouseClicked(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             setGameState(MENU);
+        } else if (bSave.getBounds().contains(x, y)) {
+            playing.saveLevel();
         } else {
             for (MyButton button : tileButtons) {
                 if (button.getBounds().contains(x, y)) {
@@ -54,12 +56,15 @@ public class BottomBar {
     public void mouseMoved(int x, int y) {
         // Reset mouse over
         bMenu.setMouseOver(false);
+        bSave.setMouseOver(false);
         for (MyButton button : tileButtons) {
             button.setMouseOver(false);
         }
 
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
+        } else if (bSave.getBounds().contains(x, y)) {
+            bSave.setMouseOver(true);
         } else {
             for (MyButton button : tileButtons) {
                 if (button.getBounds().contains(x, y)) {
@@ -73,6 +78,8 @@ public class BottomBar {
     public void mousePressed(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMousePressed(true);
+        } else if (bSave.getBounds().contains(x, y)) {
+            bSave.setMousePressed(true);
         } else {
             for (MyButton button : tileButtons) {
                 if (button.getBounds().contains(x, y)) {
@@ -92,20 +99,22 @@ public class BottomBar {
         int buttonsYPos = 650;
         int buttonsWidth = 100;
         int buttonsHeight = 30;
-        //int offset = 40;
+        int buttonOffset = 100;
 
         bMenu = new MyButton("Menu", buttonsXPos, buttonsYPos, buttonsWidth, buttonsHeight);
+        bSave = new MyButton("Save", buttonsXPos + buttonOffset, buttonsYPos, buttonsWidth, buttonsHeight);
 
-        int offset = 0;
+        int tileOffset = 0;
         int id = 0;
         for (Tile tile : playing.getTileManager().getTiles()) {
-            tileButtons.add(new MyButton(tile.getName(), 250 + offset, this.y, 50, 50, id++));
-            offset += 60;
+            tileButtons.add(new MyButton(tile.getName(), 250 + tileOffset, this.y, 50, 50, id++));
+            tileOffset += 60;
         }
     }
 
     private void drawButtons(Graphics g) {
         bMenu.draw(g);
+        bSave.draw(g);
         drawTileButtons(g);
         drawSelectedTile(g);
     }
@@ -146,6 +155,7 @@ public class BottomBar {
 
     private void resetButtons() {
         bMenu.resetBooleans();
+        bSave.resetBooleans();
         for (MyButton button : tileButtons) {
             button.resetBooleans();
         }
