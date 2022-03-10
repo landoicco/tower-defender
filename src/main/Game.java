@@ -1,5 +1,7 @@
 package main;
 
+import helpers.LoadSave;
+import managers.TileManager;
 import scenes.*;
 
 import javax.swing.JFrame;
@@ -7,6 +9,7 @@ import javax.swing.JFrame;
 public class Game extends JFrame implements Runnable {
 
     private GameScreen gameScreen;
+    private TileManager tileManager;
     private Thread gameThread;
     private Render render;
 
@@ -17,11 +20,13 @@ public class Game extends JFrame implements Runnable {
     private Menu menu;
     private Settings settings;
     private Playing playing;
+    private Editing editing;
 
     public Game() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initClasses();
+        createDefaultLevel();
         setResizable(false);
         add(gameScreen);
         pack();
@@ -29,11 +34,21 @@ public class Game extends JFrame implements Runnable {
     }
 
     private void initClasses() {
+        this.tileManager = new TileManager();
         this.render = new Render(this);
         this.gameScreen = new GameScreen(this);
         this.menu = new Menu(this);
         this.playing = new Playing(this);
         this.settings = new Settings(this);
+        this.editing = new Editing(this);
+    }
+
+    private void createDefaultLevel() {
+        int[] array = new int[400];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = 0;
+        }
+        LoadSave.createLevel("default_level", array);
     }
 
     public static void main(String[] args) {
@@ -109,5 +124,13 @@ public class Game extends JFrame implements Runnable {
 
     public Playing getPlaying() {
         return playing;
+    }
+
+    public Editing getEditing() {
+        return editing;
+    }
+
+    public TileManager getTileManager() {
+        return tileManager;
     }
 }

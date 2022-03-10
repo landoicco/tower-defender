@@ -1,52 +1,39 @@
 package ui;
 
 import objects.Tile;
-import scenes.Playing;
+import scenes.Editing;
 
-import java.awt.Graphics;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static main.GameStates.MENU;
 import static main.GameStates.setGameState;
 
-public class BottomBar {
-    private int width, height, x, y;
+public class ToolBar extends Bar {
+
     private MyButton bMenu, bSave;
-    private Playing playing;
+    private Editing editing;
     private Tile selectedTile;
 
     private ArrayList<MyButton> tileButtons = new ArrayList<>();
 
-    public BottomBar(int x, int y, int width, int height, Playing playing) {
-        this.width = width;
-        this.height = height;
-        this.playing = playing;
-        this.x = x;
-        this.y = y;
+    public ToolBar(int x, int y, int width, int height, Editing editing) {
+        super(x, y, width, height);
+        this.editing = editing;
         initButtons();
-    }
-
-    public void draw(Graphics g) {
-        // Background
-        g.setColor(new Color(212, 34, 198));
-        g.fillRect(x, y, width, height);
-
-        // Buttons
-        drawButtons(g);
     }
 
     public void mouseClicked(int x, int y) {
         if (bMenu.getBounds().contains(x, y)) {
             setGameState(MENU);
         } else if (bSave.getBounds().contains(x, y)) {
-            playing.saveLevel();
+            editing.saveLevel();
         } else {
             for (MyButton button : tileButtons) {
                 if (button.getBounds().contains(x, y)) {
-                    selectedTile = playing.getTileManager().getTile(button.getId());
-                    playing.setSelectedTile(selectedTile);
+                    selectedTile = editing.getGame().getTileManager().getTile(button.getId());
+                    editing.setSelectedTile(selectedTile);
                     return;
                 }
             }
@@ -106,7 +93,7 @@ public class BottomBar {
 
         int tileOffset = 0;
         int id = 0;
-        for (Tile tile : playing.getTileManager().getTiles()) {
+        for (Tile tile : editing.getGame().getTileManager().getTiles()) {
             tileButtons.add(new MyButton(tile.getName(), 250 + tileOffset, this.y, 50, 50, id++));
             tileOffset += 60;
         }
@@ -149,8 +136,13 @@ public class BottomBar {
         }
     }
 
-    private BufferedImage getButtonImage(int id) {
-        return playing.getTileManager().getSprite(id);
+    public void draw(Graphics g) {
+        // Background
+        g.setColor(new Color(212, 34, 198));
+        g.fillRect(x, y, width, height);
+
+        // Buttons
+        drawButtons(g);
     }
 
     private void resetButtons() {
@@ -159,5 +151,9 @@ public class BottomBar {
         for (MyButton button : tileButtons) {
             button.resetBooleans();
         }
+    }
+
+    private BufferedImage getButtonImage(int id) {
+        return editing.getGame().getTileManager().getSprite(id);
     }
 }
