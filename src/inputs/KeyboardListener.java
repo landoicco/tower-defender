@@ -1,11 +1,20 @@
 package inputs;
 
+import main.Game;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import static main.GameStates.*;
 
 public class KeyboardListener implements KeyListener {
+
+    private Game game;
+
+    public KeyboardListener(Game game) {
+        this.game = game;
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -19,6 +28,8 @@ public class KeyboardListener implements KeyListener {
         } else if (e.getKeyCode() == KeyEvent.VK_S) {
             System.out.println("S key pressed!");
             gameState = SETTINGS;
+        } else if (gameState == EDITING) {
+            game.getEditing().keyPressed(e);
         } else {
             gameState = MENU;
         }
