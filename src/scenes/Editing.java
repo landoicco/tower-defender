@@ -18,12 +18,14 @@ public class Editing extends GameScene implements GameMethods {
 
     public Editing(Game game) {
         super(game);
-        loadDefaultLevel();
         toolBar = new ToolBar(0, 640, 640, 50, this);
     }
 
     @Override
     public void render(Graphics g) {
+        if (lvl == null) {
+            loadDefaultLevel();
+        }
         drawLevel(g);
         toolBar.draw(g);
         drawSelectedTile(g);

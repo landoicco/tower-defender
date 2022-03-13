@@ -15,13 +15,15 @@ public class Playing extends GameScene implements GameMethods {
 
     public Playing(Game game) {
         super(game);
-        loadDefaultLevel();
         actionBar = new ActionBar(0, 640, 640, 50, this);
 
     }
 
     @Override
     public void render(Graphics g) {
+        if (lvl == null) {
+            loadDefaultLevel();
+        }
         drawLevel(g);
         actionBar.draw(g);
     }
