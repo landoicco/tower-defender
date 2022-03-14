@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 public class Editing extends GameScene implements GameMethods {
 
     private int mouseX, mouseY, lastTileX, lastTileY, lastTileId;
+    private int animationIndex, tick;
     private int[][] lvl;
     private boolean drawSelected;
     private Tile selectedTile;
@@ -24,6 +25,7 @@ public class Editing extends GameScene implements GameMethods {
 
     @Override
     public void render(Graphics g) {
+        updateTick();
         if (lvl == null) {
             loadDefaultLevel();
         }
@@ -111,9 +113,17 @@ public class Editing extends GameScene implements GameMethods {
         for (int y = 0; y < lvl.length; y++) {
             for (int x = 0; x < lvl[y].length; x++) {
                 int id = lvl[x][y];
-                g.drawImage(getSprite(id), x * 32, y * 32, null);
+                if (isAnimation(id)) {
+                    g.drawImage(getSprite(id, animationIndex), x * 32, y * 32, null);
+                } else {
+                    g.drawImage(getSprite(id), x * 32, y * 32, null);
+                }
             }
         }
+    }
+
+    private boolean isAnimation(int spriteID) {
+        return getGame().getTileManager().isSpriteAnimation(spriteID);
     }
 
     private void drawSelectedTile(Graphics g) {
@@ -123,12 +133,28 @@ public class Editing extends GameScene implements GameMethods {
         }
     }
 
+    private void updateTick() {
+        tick++;
+        if (tick >= 50) {
+            tick = 0;
+            animationIndex++;
+            // Check for total num of frames in animation
+            if (animationIndex >= 4) {
+                animationIndex = 0;
+            }
+        }
+    }
+
     private void loadDefaultLevel() {
         lvl = LoadSave.getLevelData("default_level");
     }
 
     private BufferedImage getSprite(int spriteID) {
         return getGame().getTileManager().getSprite(spriteID);
+    }
+
+    private BufferedImage getSprite(int spriteID, int animationIndex) {
+        return getGame().getTileManager().getAnimatedSprite(spriteID, animationIndex);
     }
 
 }

@@ -52,9 +52,26 @@ public class ImageFix {
                 g2d.rotate(Math.toRadians(-rotAngle), (width / 2), (height / 2));
             }
         }
-
-        g2d.dispose();
         return newImg;
     }
 
+    // Rotate second image only + animation
+    public static BufferedImage[] getBuildRotatedImage(BufferedImage[] images, BufferedImage secondImage, int rotAngle) {
+        int width = images[0].getWidth();
+        int height = images[0].getHeight();
+        BufferedImage[] animatedImage = new BufferedImage[images.length];
+
+        for (int i = 0; i < images.length; i++) {
+            BufferedImage newImg = new BufferedImage(width, height, images[0].getType());
+            Graphics2D g2d = newImg.createGraphics();
+
+            g2d.drawImage(images[i], 0, 0, null);
+            g2d.rotate(Math.toRadians(rotAngle), (width / 2), (height / 2));
+            g2d.drawImage(secondImage, 0, 0, null);
+
+            g2d.dispose();
+            animatedImage[i] = newImg;
+        }
+        return animatedImage;
+    }
 }
